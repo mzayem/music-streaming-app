@@ -6,6 +6,7 @@ import { BiSearch } from "react-icons/bi";
 import { HiHome } from "react-icons/hi";
 
 import Box from "@/components/box";
+import SidebarItem from "./sidebaeItem";
 
 interface Sidebarprops {
   children: React.ReactNode;
@@ -47,12 +48,20 @@ export default function Sidebar({ children }: Sidebarprops) {
         <Box>
           <div className="flex flex-col gap-y-4 px-5 py-4">
             {routes.map((item) => (
-              <p key={item.label}>{item.label}</p>
+              <SidebarItem
+                key={item.label}
+                {...item}
+                icon={item.icon}
+                label={item.label}
+                href={item.href}
+                active={item.active}
+              />
             ))}
           </div>
         </Box>
         <Box className="overflow-y-auto h-full">Sidebar navigations</Box>
       </div>
+      <main className="h-full flex-1 overflow-y-auto py-2">{children}</main>
     </div>
   );
 }
