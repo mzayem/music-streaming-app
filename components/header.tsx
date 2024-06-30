@@ -5,6 +5,7 @@ import { BiSearch } from "react-icons/bi";
 import { HiHome } from "react-icons/hi";
 import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
 import { twMerge } from "tailwind-merge";
+import Button from "./button";
 
 interface HeaderProps {
   children: React.ReactNode;
@@ -100,6 +101,36 @@ export default function Header({ children, className }: HeaderProps) {
           >
             <BiSearch className="text-black" size={20} />
           </button>
+        </div>
+        <div
+          className="
+          flex
+          justify-between
+          items-center
+          gap-x-4"
+        >
+          <>
+            <div>
+              <Button
+                onClick={() => {
+                  alert("sign up model comming soon!");
+                }}
+                className="bg-transparent text-neutral-300 font-medium"
+              >
+                Sign up
+              </Button>
+            </div>
+            <div>
+              <Button
+                onClick={() => {
+                  alert("Log in model comming soon!");
+                }}
+                className="bg-white px-5 py-2"
+              >
+                Log in
+              </Button>
+            </div>
+          </>
         </div>
       </div>
     </div>
