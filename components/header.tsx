@@ -5,7 +5,8 @@ import { BiSearch } from "react-icons/bi";
 import { HiHome } from "react-icons/hi";
 import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
 import { twMerge } from "tailwind-merge";
-import Button from "./button";
+
+import Button from "@/components/button";
 
 interface HeaderProps {
   children: React.ReactNode;
@@ -133,6 +134,7 @@ export default function Header({ children, className }: HeaderProps) {
           </>
         </div>
       </div>
+      {children}
     </div>
   );
 }
