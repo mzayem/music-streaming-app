@@ -1,11 +1,18 @@
 "use client";
 
+import useAuthModal from "@/hooks/useAuthModal";
+import { useUser } from "@/hooks/useUser";
 import { AiOutlinePlus } from "react-icons/ai";
 import { TbPlaylist } from "react-icons/tb";
 
 export default function Library() {
+  const authModal = useAuthModal();
+  const { user } = useUser();
+
   const onClick = () => {
-    alert("upload component under construction!");
+    if (!user) {
+      return authModal.onOpen();
+    }
   };
 
   return (
