@@ -1,5 +1,6 @@
 "use client";
 
+import LikeButton from "@/components/likeButton";
 import MediaItem from "@/components/mediaItem";
 import { Song } from "@/types";
 
@@ -32,7 +33,7 @@ export default function SearchContent({ songs }: SearchContentProps) {
           <div className="flex-1">
             <MediaItem onClick={() => {}} data={song} />
           </div>
-          {/*TODO: add like button here */}
+          <LikeButton songId={song.id} />
         </div>
       ))}
     </div>
