@@ -2,6 +2,7 @@
 
 import LikeButton from "@/components/likeButton";
 import MediaItem from "@/components/mediaItem";
+import useOnPlay from "@/hooks/useOnPlay";
 import { Song } from "@/types";
 
 interface SearchContentProps {
@@ -9,6 +10,8 @@ interface SearchContentProps {
 }
 
 export default function SearchContent({ songs }: SearchContentProps) {
+  const onPlay = useOnPlay(songs);
+
   if (songs.length === 0) {
     return (
       <div
@@ -31,7 +34,7 @@ export default function SearchContent({ songs }: SearchContentProps) {
       {songs.map((song) => (
         <div key={song.id} className="flex items-center gap-x-4 w-full">
           <div className="flex-1">
-            <MediaItem onClick={() => {}} data={song} />
+            <MediaItem onClick={(id: string) => onPlay(id)} data={song} />
           </div>
           <LikeButton songId={song.id} />
         </div>

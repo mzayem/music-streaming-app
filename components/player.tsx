@@ -22,7 +22,8 @@ export default function Player() {
         w-full
         py-2
         px-4
-        h-[80px]
+        h-[90px]
+        group-main
         "
     >
       <PlayerContent key={songUrl} song={song} songUrl={songUrl} />

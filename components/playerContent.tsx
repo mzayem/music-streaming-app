@@ -10,7 +10,8 @@ import usePlayer from "@/hooks/usePlayer";
 import MediaItem from "./mediaItem";
 import LikeButton from "./likeButton";
 import Slider from "./slider";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useSound from "use-sound";
 
 interface PlayerContentProps {
   song: Song;
@@ -21,6 +22,8 @@ export default function PlayerContent({ song, songUrl }: PlayerContentProps) {
   const player = usePlayer();
   const [volume, setVolume] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const duration = song.duration || 0;
 
   const Icon = isPlaying ? BsPauseFill : BsPlayFill;
   const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
@@ -55,40 +58,112 @@ export default function PlayerContent({ song, songUrl }: PlayerContentProps) {
     player.setId(prevSong);
   };
 
+  const [play, { pause, sound }] = useSound(songUrl, {
+    volume: volume,
+    onplay: () => {
+      setIsPlaying(true);
+    },
+    onend: () => {
+      setIsPlaying(false);
+      onPlayNext();
+    },
+    onpause: () => setIsPlaying(false),
+
+    format: ["mp3"],
+  });
+
+  useEffect(() => {
+    sound?.play();
+
+    return () => {
+      sound?.unload();
+    };
+  }, [sound]);
+
+  useEffect(() => {
+    if (isPlaying && sound) {
+      const interval = setInterval(() => {
+        setCurrentTime(sound.seek());
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [isPlaying, sound]);
+
+  const handlePlay = () => {
+    if (isPlaying) {
+      pause();
+    } else {
+      play();
+    }
+  };
+
+  const handleMute = () => {
+    if (volume === 0) {
+      setVolume(1);
+    } else setVolume(0);
+  };
+
   return (
-    <div
-      className="
+    <>
+      <div className="flex items-center justify-center h-1 my-1 mx-2">
+        {/* <span className="flex items-center justify-center mr-2 text-neutral-400 text-sm md:hidden">
+          {new Date(currentTime * 1000).toISOString().substr(14, 5)}
+        </span> */}
+        <Slider
+          value={currentTime}
+          max={duration}
+          onChange={(value) => {
+            setCurrentTime(value);
+            sound.seek(value);
+          }}
+          colorClass="bg-green-500"
+        />
+        {/* <span className="flex items-center justify-center ml-2 text-neutral-400 text-sm md:hidden">
+          {new Date(duration * 1000).toISOString().substr(14, 5)}
+        </span> */}
+      </div>
+
+      <div
+        className="
         grid
         grid-cols-2
         md:grid-cols-3
         h-full
         "
-    >
-      <div
-        className="
+      >
+        <div
+          className="
           flex
           w-full
           justify-start
           "
-      >
-        <div className="flex items-center gap-x-4">
-          <MediaItem data={song} />
-          <LikeButton songId={song.id} />
+        >
+          <div className="flex items-center gap-x-4">
+            <MediaItem data={song} />
+            <LikeButton songId={song.id} />
+          </div>
         </div>
-      </div>
 
-      <div
-        className="
+        <div
+          className="
           flex
           md:hidden
           col-auto
           w-full
           justify-end
           items-center"
-      >
-        <div
-          onClick={() => {}}
-          className="
+        >
+          <span className="flex items-center justify-center mr-2 text-neutral-400 text-sm md:hidden">
+            {`${new Date(currentTime * 1000)
+              .toISOString()
+              .substr(14, 5)} / ${new Date(duration * 1000)
+              .toISOString()
+              .substr(14, 5)}`}
+          </span>
+          <div
+            onClick={handlePlay}
+            className="
           h-10
           w-10
           flex
@@ -99,13 +174,13 @@ export default function PlayerContent({ song, songUrl }: PlayerContentProps) {
           p-1
           cursor-pointer
         "
-        >
-          <Icon size={30} className="text-black" />
+          >
+            <Icon size={30} className="text-black" />
+          </div>
         </div>
-      </div>
 
-      <div
-        className="
+        <div
+          className="
           hidden
           h-full
           md:flex
@@ -115,15 +190,15 @@ export default function PlayerContent({ song, songUrl }: PlayerContentProps) {
           max-w-[722px]
           gap-x-6
       "
-      >
-        <AiFillStepBackward
-          onClick={onPlayPrev}
-          size={30}
-          className="text-neutral-400 cursor-pointer hover:text-white transition"
-        />
-        <div
-          onClick={() => {}}
-          className="
+        >
+          <AiFillStepBackward
+            onClick={onPlayPrev}
+            size={30}
+            className="text-neutral-400 cursor-pointer hover:text-white transition"
+          />
+          <div
+            onClick={handlePlay}
+            className="
             flex
             items-center
             justify-center
@@ -134,32 +209,41 @@ export default function PlayerContent({ song, songUrl }: PlayerContentProps) {
             p-1
             cursor-pointer
         "
-        >
-          <Icon size={30} className="text-black" />
+          >
+            <Icon size={30} className="text-black" />
+          </div>
+          <AiFillStepForward
+            onClick={onPlayNext}
+            size={30}
+            className="text-neutral-400 cursor-pointer hover:text-white transition"
+          />
         </div>
-        <AiFillStepForward
-          onClick={onPlayNext}
-          size={30}
-          className="text-neutral-400 cursor-pointer hover:text-white transition"
-        />
-      </div>
 
-      <div
-        className="
+        <div
+          className="
           hidden
           md:flex
           w-full
           justify-end
           pr-2"
-      >
-        <div className="flex items-center gap-x-2 w-[120px]">
-          <VolumeIcon
-            size={34}
-            className="text-neutral-400 cursor-pointer hover:text-white transition"
-          />
-          <Slider />
+        >
+          <span className="flex items-center justify-center mr-2 text-neutral-400">
+            {`${new Date(currentTime * 1000)
+              .toISOString()
+              .substr(14, 5)} / ${new Date(duration * 1000)
+              .toISOString()
+              .substr(14, 5)}`}
+          </span>
+          <div className="flex items-center gap-x-2 w-[120px]">
+            <VolumeIcon
+              onClick={handleMute}
+              size={34}
+              className="text-neutral-400 cursor-pointer hover:text-white transition"
+            />
+            <Slider value={volume} onChange={(value) => setVolume(value)} />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

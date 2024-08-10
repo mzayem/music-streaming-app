@@ -1,5 +1,7 @@
 "use client";
 
+import { Song } from "@/types";
+
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 import { BiSearch } from "react-icons/bi";
@@ -8,7 +10,8 @@ import { HiHome } from "react-icons/hi";
 import Box from "@/components/box";
 import SidebarItem from "@/components/sidebaeItem";
 import Library from "@/components/library";
-import { Song } from "@/types";
+import usePlayer from "@/hooks/usePlayer";
+import { twMerge } from "tailwind-merge";
 
 interface Sidebarprops {
   children: React.ReactNode;
@@ -16,6 +19,7 @@ interface Sidebarprops {
 }
 export default function Sidebar({ children, songs }: Sidebarprops) {
   const pathname = usePathname();
+  const player = usePlayer();
 
   const routes = useMemo(
     () => [
@@ -36,7 +40,12 @@ export default function Sidebar({ children, songs }: Sidebarprops) {
   );
 
   return (
-    <div className="flex h-full">
+    <div
+      className={twMerge(
+        "flex h-full",
+        player.activeId && "h-[calc(100%-90px)]"
+      )}
+    >
       <div
         className="
         hidden
