@@ -92,6 +92,7 @@ export default function Header({ children, className }: HeaderProps) {
         </div>
         <div className="flex md:hidden items-center gap-x-2">
           <button
+            onClick={() => router.push("/")}
             className="
             rounded-full
             p-2
@@ -106,6 +107,7 @@ export default function Header({ children, className }: HeaderProps) {
             <HiHome className="text-black" size={20} />
           </button>
           <button
+            onClick={() => router.push("/search")}
             className="
             rounded-full
             p-2
