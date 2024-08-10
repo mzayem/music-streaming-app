@@ -227,7 +227,7 @@ export default function PlayerContent({ song, songUrl }: PlayerContentProps) {
           justify-end
           pr-2"
         >
-          <span className="flex items-center justify-center mr-2 text-neutral-400">
+          <span className="flex items-center justify-center mr-2 text-sm text-neutral-400">
             {`${new Date(currentTime * 1000)
               .toISOString()
               .substr(14, 5)} / ${new Date(duration * 1000)
