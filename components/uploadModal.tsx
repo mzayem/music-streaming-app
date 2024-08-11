@@ -13,6 +13,7 @@ import useUploadModal from "@/hooks/useUploadModal";
 import Modal from "@/components/modal";
 import Input from "./Input";
 import Button from "./button";
+import { ThreeDots } from "react-loading-icons";
 
 export default function UploadModal() {
   const { isOpen, onClose } = useUploadModal();
@@ -149,8 +150,16 @@ export default function UploadModal() {
             {...register("image", { required: true })}
           />
         </div>
-        <Button disabled={isLoading} type="submit">
-          Create
+        <Button
+          className="flex items-center justify-center"
+          disabled={isLoading}
+          type="submit"
+        >
+          {isLoading ? (
+            <ThreeDots color="#fff" height={30} width={30} />
+          ) : (
+            "Create"
+          )}
         </Button>
       </form>
     </Modal>
