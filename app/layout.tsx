@@ -8,6 +8,7 @@ import ModalProvider from "@/providers/ModalProvider";
 import ToasterProvider from "@/providers/toasterProvider";
 import getSongsByUserId from "@/actions/getSongByUserId";
 import Player from "@/components/player";
+import NextTopLoader from "nextjs-toploader";
 
 const font = Figtree({ subsets: ["latin"] });
 
@@ -31,7 +32,10 @@ export default async function RootLayout({
         <SupabaseProvider>
           <UserProvider>
             <ModalProvider />
-            <Sidebar songs={userSongs}>{children}</Sidebar>
+            <Sidebar songs={userSongs}>
+              <NextTopLoader height={1} color="#22C55E" />
+              {children}
+            </Sidebar>
             <Player />
           </UserProvider>
         </SupabaseProvider>

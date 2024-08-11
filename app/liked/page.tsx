@@ -3,6 +3,7 @@ import Image from "next/image";
 import getLikedSong from "@/actions/getLikedSong ";
 import Header from "@/components/header";
 import LikedContent from "./components/likedContent";
+import NextTopLoader from "nextjs-toploader";
 
 export const revalidate = 0;
 
