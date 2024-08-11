@@ -181,7 +181,11 @@ export default function PlayerContent({ song, songUrl }: PlayerContentProps) {
           cursor-pointer
         "
           >
-            <Icon size={30} className="text-black" />
+            {loading ? (
+              <Puff stroke="#000000" fill="#000000" width={30} height={30} />
+            ) : (
+              <Icon size={30} className="text-black" />
+            )}
           </div>
         </div>
 
