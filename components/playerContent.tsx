@@ -12,6 +12,7 @@ import LikeButton from "./likeButton";
 import Slider from "./slider";
 import { useEffect, useState } from "react";
 import useSound from "use-sound";
+import { Puff } from "react-loading-icons";
 
 interface PlayerContentProps {
   song: Song;
@@ -23,6 +24,7 @@ export default function PlayerContent({ song, songUrl }: PlayerContentProps) {
   const [volume, setVolume] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
+  const [loading, setLoading] = useState(true);
   const duration = song.duration || 0;
 
   const Icon = isPlaying ? BsPauseFill : BsPlayFill;
@@ -62,10 +64,14 @@ export default function PlayerContent({ song, songUrl }: PlayerContentProps) {
     volume: volume,
     onplay: () => {
       setIsPlaying(true);
+      setLoading(false);
     },
     onend: () => {
       setIsPlaying(false);
       onPlayNext();
+    },
+    onloaderror: () => {
+      setLoading(false);
     },
     onpause: () => setIsPlaying(false),
 
@@ -210,7 +216,11 @@ export default function PlayerContent({ song, songUrl }: PlayerContentProps) {
             cursor-pointer
         "
           >
-            <Icon size={30} className="text-black" />
+            {loading ? (
+              <Puff stroke="#000000" fill="#000000" width={30} height={30} />
+            ) : (
+              <Icon size={30} className="text-black" />
+            )}
           </div>
           <AiFillStepForward
             onClick={onPlayNext}
