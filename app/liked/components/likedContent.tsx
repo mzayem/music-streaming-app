@@ -23,7 +23,6 @@ export default function LikedContent({ songs }: LikedContentProps) {
   useEffect(() => {
     if (!isLoading && !user) {
       router.push("/");
-      authModal.onOpen();
     }
   }, [isLoading, user, router, authModal]);
 
