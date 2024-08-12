@@ -1,9 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
-
 import { useUser } from "@/hooks/useUser";
 import { Song } from "@/types";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import MediaItem from "@/components/mediaItem";
 import LikeButton from "@/components/likeButton";
 import useOnPlay from "@/hooks/useOnPlay";
@@ -17,13 +16,16 @@ export default function LikedContent({ songs }: LikedContentProps) {
   const router = useRouter();
   const { isLoading, user } = useUser();
   const authModal = useAuthModal();
-
   const onPlay = useOnPlay(songs);
 
+  // Ref to track if redirect/modal has been triggered
+  const hasRedirected = useRef(false);
+
   useEffect(() => {
-    if (!isLoading && !user) {
+    if (!isLoading && !user && !hasRedirected.current) {
+      hasRedirected.current = true; // Set the ref to true to prevent re-triggering
       authModal.onOpen();
-      router.push("/");
+      // router.push("/");
     }
   }, [isLoading, user, router, authModal]);
 
@@ -39,7 +41,7 @@ export default function LikedContent({ songs }: LikedContentProps) {
           text-neutral-400
     "
       >
-        No liked yet
+        {user ? "No liked songs yet" : "You need to login to see liked songs"}
       </div>
     );
   }
