@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import MediaItem from "@/components/mediaItem";
 import LikeButton from "@/components/likeButton";
 import useOnPlay from "@/hooks/useOnPlay";
+import useAuthModal from "@/hooks/useAuthModal";
 
 interface LikedContentProps {
   songs: Song[];
@@ -15,14 +16,15 @@ interface LikedContentProps {
 export default function LikedContent({ songs }: LikedContentProps) {
   const router = useRouter();
   const { isLoading, user } = useUser();
+  const authModal = useAuthModal();
 
   const onPlay = useOnPlay(songs);
 
   useEffect(() => {
     if (!isLoading && !user) {
-      router.replace("/");
+      authModal.onOpen();
     }
-  }, [isLoading, user, router]);
+  }, [isLoading, user, authModal]);
 
   if (songs.length === 0) {
     return (

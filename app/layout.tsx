@@ -33,7 +33,12 @@ export default async function RootLayout({
           <UserProvider>
             <ModalProvider />
             <Sidebar songs={userSongs}>
-              <NextTopLoader height={1} color="#22C55E" />
+              <NextTopLoader
+                showSpinner={false}
+                height={1}
+                color="#22C55E"
+                template='<div class="bar" role="bar"><div class="peg"></div></div>'
+              />
               {children}
             </Sidebar>
             <Player />
