@@ -37,7 +37,7 @@ export default function Slider({
       value={[value]}
       onValueChange={handleChange}
       max={max || 1}
-      step={0.1}
+      step={0.01}
       aria-label="Volume"
     >
       <RadixSlider.Track
