@@ -28,7 +28,7 @@ export default async function SearchPage({ searchParams }: SearchProps) {
       <Header className="from-bg-neutral-900">
         <div className="mb-2 flex flex-col gap-y-6">
           <h1 className="text-white text-3xl font-semibold">Search</h1>
-          <SearchInput />
+          {/* <SearchInput /> */}
         </div>
       </Header>
       <SearchContent songs={songs} />
