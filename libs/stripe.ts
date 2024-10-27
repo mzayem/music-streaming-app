@@ -6,6 +6,6 @@ export const stripe = new Stripe(
     apiVersion: "2024-06-20",
    appInfo: {
        name: "Beat Stream",
-       version: "1.0.0", 
+       version: "0.1.0", 
    }
 });
