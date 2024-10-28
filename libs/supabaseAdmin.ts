@@ -149,7 +149,7 @@ creationAction: boolean
        status : subscription.status,
        price_id: subscription.items.data[0].price.id,
        // @ts-ignore
-       quantity: subsription.quantity,
+       quantity: subscription.quantity,
        cancel_at_period_end: subscription.cancel_at_period_end, 
        cancel_at: subscription.cancel_at ? toDateTime(subscription.cancel_at).toISOString(): null,
        canceled_at:  subscription.canceled_at ? toDateTime(subscription.canceled_at).toISOString(): null,

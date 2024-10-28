@@ -28,11 +28,14 @@ export async function POST(req: Request) {
     let event: Stripe.Event;
 
     try {
-        if(!sig || !webhookSecret) return;
+        if(!sig || !webhookSecret) {
+            console.error("Missing Stripe signature or webhook secret");
+            return new NextResponse("Webhook signature or secret missing", { status: 400 });
+        }
         event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
     
     } catch (error: any) {
-        console.log('Error message:'+ error.message);
+        console.log('Error message sig:', error.message);
         return new NextResponse(`Webhook Error: ${error.message}`, { status: 400 });
     }
 
@@ -51,6 +54,7 @@ export async function POST(req: Request) {
                 case 'customer.subscription.updated':
                 case 'customer.subscription.deleted':
                     const subscription = event.data.object as Stripe.Subscription;
+                    console.log("Subscription Event:", event.type, "Subscription ID:", subscription.id, "Customer ID:", subscription.customer);
                     await manageSubscriptionStatusChange(
                         subscription.id,
                         subscription.customer as string,
@@ -59,6 +63,7 @@ export async function POST(req: Request) {
                     break;
                 case 'checkout.session.completed':
                     const checkoutSession = event.data.object as Stripe.Checkout.Session;
+                    console.log("Checkout Session:", checkoutSession.id, "Customer ID:", checkoutSession.customer, "Mode:", checkoutSession.mode);
                     if(checkoutSession.mode === 'subscription') {
                         const subscriptionId = checkoutSession.subscription;
                         await manageSubscriptionStatusChange(
@@ -73,9 +78,9 @@ export async function POST(req: Request) {
             }
 
         }
-         catch (error) {
-            console.log('Error message:'+ error);
-            return new NextResponse(`Webhook Error`, { status: 400 });
+         catch (error:any) {
+            console.log('Error message switch:', error.message);
+            return new NextResponse(`Webhook Error: ${error.message || 'Unknown error'}`, { status: 400 });
         }
     }
     return  NextResponse.json({ received: true }, { status: 200 });
