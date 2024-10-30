@@ -140,7 +140,7 @@ creationAction: boolean
         } 
     );
 
-    const subscriptionDate: Database['public']['Tables']['subscriptions']['Insert'] = 
+    const subscriptionData: Database['public']['Tables']['subscriptions']['Insert'] = 
     { 
        id: subscription.id,
        user_id: uuid,
@@ -163,7 +163,7 @@ creationAction: boolean
 
     const {error} = await supabaseAdmin
     .from('subscriptions')
-    .upsert([subscriptionDate]);
+    .upsert([subscriptionData]);
 
     if (error) throw error;
 
