@@ -8,12 +8,14 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { TbPlaylist } from "react-icons/tb";
 import MediaItem from "./mediaItem";
 import useOnPlay from "@/hooks/useOnPlay";
+import useSubscribeModal from "@/hooks/useSubscribeModal";
 
 interface LibraryProps {
   songs: Song[];
 }
 
 export default function Library({ songs }: LibraryProps) {
+  const subscribeModal = useSubscribeModal();
   const authModal = useAuthModal();
   const uploadModal = useUploadModal();
   const { user, subscription } = useUser();
@@ -24,8 +26,10 @@ export default function Library({ songs }: LibraryProps) {
       return authModal.onOpen();
     }
 
-    // TODO: check for subscription
-
+    if (!subscription) {
+      console.log("subscription not found");
+      return subscribeModal.onOpen();
+    }
     return uploadModal.onOpen();
   };
 
