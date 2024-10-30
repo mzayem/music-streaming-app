@@ -16,7 +16,6 @@ export default function useOnPlay(songs:Song[]) {
         }
 
         if(!subscription){
-            console.log('subscription not found')
             return subscribeModal.onOpen();
         }
 

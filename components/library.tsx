@@ -27,7 +27,6 @@ export default function Library({ songs }: LibraryProps) {
     }
 
     if (!subscription) {
-      console.log("subscription not found");
       return subscribeModal.onOpen();
     }
     return uploadModal.onOpen();
