@@ -117,6 +117,7 @@ export default function PlayerContent({ song, songUrl }: PlayerContentProps) {
           {new Date(currentTime * 1000).toISOString().substr(14, 5)}
         </span> */}
         <Slider
+          disabled={loading}
           value={currentTime}
           max={duration}
           onChange={(value) => {

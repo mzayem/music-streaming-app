@@ -8,6 +8,7 @@ interface SliderProps {
   onChange: (value: number) => void;
   max?: number;
   colorClass?: string;
+  disabled?: boolean;
 }
 
 export default function Slider({
@@ -15,6 +16,7 @@ export default function Slider({
   onChange,
   max,
   colorClass,
+  disabled,
 }: SliderProps) {
   const handleChange = (newValue: number[]) => {
     onChange?.(newValue[0]);
@@ -22,6 +24,7 @@ export default function Slider({
 
   return (
     <RadixSlider.Root
+      disabled={disabled}
       className="
         flex
         relative
