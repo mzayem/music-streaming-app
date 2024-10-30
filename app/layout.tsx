@@ -9,6 +9,7 @@ import ToasterProvider from "@/providers/toasterProvider";
 import getSongsByUserId from "@/actions/getSongByUserId";
 import Player from "@/components/player";
 import NextTopLoader from "nextjs-toploader";
+import getActiveProductsWithPrices from "@/actions/getActiveProductsWithPrices";
 
 const font = Figtree({ subsets: ["latin"] });
 
@@ -25,13 +26,15 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const userSongs = await getSongsByUserId();
+  const products = await getActiveProductsWithPrices();
+
   return (
     <html lang="en">
       <body className={font.className}>
         <ToasterProvider />
         <SupabaseProvider>
           <UserProvider>
-            <ModalProvider />
+            <ModalProvider products={products} />
             <Sidebar songs={userSongs}>
               <NextTopLoader
                 showSpinner={false}

@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 
+
 export interface Song {
   id: string;
   user_id: string;
@@ -42,6 +43,12 @@ export interface Price {
     trial_period_days?: number;
     metadata?: Stripe.Metadata;
     product? : Product;
+}
+
+export interface productWithPrice extends Product{
+    prices?: Price[];
+
+    
 }
 
 export interface Subscription {
