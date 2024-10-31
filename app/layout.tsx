@@ -1,15 +1,11 @@
-import type { Metadata } from "next";
+"use client";
+
+import Player from "@/components/player";
+import SupabaseProvider from "@/providers/supabaseProvider";
+import ToasterProvider from "@/providers/toasterProvider";
+import UserProvider from "@/providers/userProvider";
 import { Figtree } from "next/font/google";
 import "./globals.css";
-import Sidebar from "@/components/sidebar";
-import SupabaseProvider from "@/providers/supabaseProvider";
-import UserProvider from "@/providers/userProvider";
-import ModalProvider from "@/providers/ModalProvider";
-import ToasterProvider from "@/providers/toasterProvider";
-import getSongsByUserId from "@/actions/getSongByUserId";
-import Player from "@/components/player";
-import NextTopLoader from "nextjs-toploader";
-import getActiveProductsWithPrices from "@/actions/getActiveProductsWithPrices";
 
 import { NetworkId } from "@/config";
 import { Wallet } from "@/wallet/near"; // Import Wallet class
@@ -23,21 +19,11 @@ const wallet = new Wallet({
   createAccessKeyFor: "beat-stream.testnet",
 });
 
-export const metadata: Metadata = {
-  title: "Beat Stream",
-  description: "Music streaming app",
-};
-
-export const revalidate = 0;
-
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const userSongs = await getSongsByUserId();
-  const products = await getActiveProductsWithPrices();
-
   return (
     <html lang="en">
       <body className={font.className}>
@@ -45,16 +31,7 @@ export default async function RootLayout({
           <ToasterProvider />
           <SupabaseProvider>
             <UserProvider>
-              <ModalProvider products={products} />
-              <Sidebar songs={userSongs}>
-                <NextTopLoader
-                  showSpinner={false}
-                  height={1}
-                  color="#22C55E"
-                  template='<div class="bar" role="bar"><div class="peg"></div></div>'
-                />
-                {children}
-              </Sidebar>
+              {children}
               <Player />
             </UserProvider>
           </SupabaseProvider>
