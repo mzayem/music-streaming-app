@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState, useContext, MouseEventHandler } from "react";
+
 import { useRouter } from "next/navigation";
 import { BiSearch } from "react-icons/bi";
 import { HiHome } from "react-icons/hi";
@@ -7,6 +9,7 @@ import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
 import { twMerge } from "tailwind-merge";
 import useAuthModal from "@/hooks/useAuthModal";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { NearContext } from "@/wallet/near";
 
 import Button from "@/components/button";
 import { useUser } from "@/hooks/useUser";
@@ -23,6 +26,33 @@ export default function Header({ children, className }: HeaderProps) {
   const player = usePlayer();
   const authModal = useAuthModal();
   const router = useRouter();
+  // near wallet check
+  const { signedAccountId, wallet } = useContext(NearContext) as {
+    signedAccountId: string | null;
+    wallet: {
+      signIn: () => void;
+      signOut: () => void;
+    } | null;
+  };
+
+  const [action, setAction] = useState<
+    MouseEventHandler<HTMLButtonElement> | undefined
+  >();
+  const [label, setLabel] = useState("Loading...");
+
+  useEffect(() => {
+    if (!wallet) return;
+
+    if (signedAccountId) {
+      setAction(() => wallet.signOut);
+      setLabel(`Logout ${signedAccountId}`);
+    } else {
+      setAction(() => wallet.signIn);
+      setLabel("Login in Near Wallet");
+    }
+  }, [signedAccountId, wallet]);
+
+  // Near wallet end
 
   const supabaseClient = useSupabaseClient();
   const { user } = useUser();
@@ -131,6 +161,10 @@ export default function Header({ children, className }: HeaderProps) {
           items-center
           gap-x-4"
         >
+          {" "}
+          <Button className="btn btn-secondary" onClick={action}>
+            {label}
+          </Button>
           {user ? (
             <div className="flex gap-4 items-center">
               <Button onClick={handleLogout} className="bg-white px-6 py-2">

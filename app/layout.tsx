@@ -11,7 +11,17 @@ import Player from "@/components/player";
 import NextTopLoader from "nextjs-toploader";
 import getActiveProductsWithPrices from "@/actions/getActiveProductsWithPrices";
 
+import { NetworkId } from "@/config";
+import { Wallet } from "@/wallet/near"; // Import Wallet class
+
+import WalletProvider from "@/components/WalletProvider"; // Make sure this path is correct
+
 const font = Figtree({ subsets: ["latin"] });
+
+const wallet = new Wallet({
+  networkId: NetworkId,
+  createAccessKeyFor: "beat-stream.testnet",
+});
 
 export const metadata: Metadata = {
   title: "Beat Stream",
@@ -31,22 +41,24 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={font.className}>
-        <ToasterProvider />
-        <SupabaseProvider>
-          <UserProvider>
-            <ModalProvider products={products} />
-            <Sidebar songs={userSongs}>
-              <NextTopLoader
-                showSpinner={false}
-                height={1}
-                color="#22C55E"
-                template='<div class="bar" role="bar"><div class="peg"></div></div>'
-              />
-              {children}
-            </Sidebar>
-            <Player />
-          </UserProvider>
-        </SupabaseProvider>
+        <WalletProvider wallet={wallet}>
+          <ToasterProvider />
+          <SupabaseProvider>
+            <UserProvider>
+              <ModalProvider products={products} />
+              <Sidebar songs={userSongs}>
+                <NextTopLoader
+                  showSpinner={false}
+                  height={1}
+                  color="#22C55E"
+                  template='<div class="bar" role="bar"><div class="peg"></div></div>'
+                />
+                {children}
+              </Sidebar>
+              <Player />
+            </UserProvider>
+          </SupabaseProvider>
+        </WalletProvider>
       </body>
     </html>
   );

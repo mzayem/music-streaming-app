@@ -9,6 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@near-js/providers": "^1.0.0",
+    "@near-wallet-selector/bitte-wallet": "^8.9.13",
+    "@near-wallet-selector/core": "^8.9.13",
+    "@near-wallet-selector/ethereum-wallets": "^8.9.13",
+    "@near-wallet-selector/here-wallet": "^8.9.13",
+    "@near-wallet-selector/ledger": "^8.9.13",
+    "@near-wallet-selector/meteor-wallet": "^8.9.13",
+    "@near-wallet-selector/modal-ui": "^8.9.13",
+    "@near-wallet-selector/my-near-wallet": "^8.9.13",
+    "@near-wallet-selector/sender": "^8.9.13",
+    "@web3modal/wagmi": "^5.1.10",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-slider": "^1.2.0",
     "@stripe/stripe-js": "^4.9.0",
@@ -17,6 +28,7 @@
     "@supabase/auth-ui-react": "^0.4.7",
     "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/supabase-js": "^2.45.6",
+    "near-api-js": "^4.0.3",
     "next": "^14.2.16",
     "nextjs-toploader": "^1.6.12",
     "query-string": "^9.1.0",
@@ -30,7 +42,8 @@
     "tailwind-merge": "^2.3.0",
     "uniqid": "^5.4.0",
     "use-sound": "^4.0.3",
-    "zustand": "^4.5.4"
+    "zustand": "^4.5.4",
+    "wagmi": "^2.12.16"
   },
   "devDependencies": {
     "@types/node": "^20",
