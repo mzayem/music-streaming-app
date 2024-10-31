@@ -4,15 +4,20 @@ import { useRouter } from "next/navigation";
 
 import useSubscribeModal from "@/hooks/useSubscribeModal";
 import { useUser } from "@/hooks/useUser";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { postData } from "@/libs/helpers";
 import toast from "react-hot-toast";
 import Button from "@/components/button";
+import { NearContext } from "@/wallet/near";
 
 export default function AccountContent() {
   const router = useRouter();
   const subscribeModal = useSubscribeModal();
   const { user, isLoading, subscription } = useUser();
+
+  const { signedAccountId } = useContext(NearContext) as {
+    signedAccountId: string | null;
+  };
 
   const [loading, setLoading] = useState(false);
 
@@ -39,6 +44,11 @@ export default function AccountContent() {
 
   return (
     <div className="mb-7 px-6">
+      <p>
+        {signedAccountId
+          ? `Wallet Id : ${signedAccountId}`
+          : "wallet not Conneted "}
+      </p>
       {!subscription ? (
         <div className="flex flex-col gap-y-4">
           <p>No active plan</p>

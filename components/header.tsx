@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useContext, MouseEventHandler } from "react";
+import { useContext } from "react";
 
 import { useRouter } from "next/navigation";
 import { BiSearch } from "react-icons/bi";
@@ -27,30 +27,12 @@ export default function Header({ children, className }: HeaderProps) {
   const authModal = useAuthModal();
   const router = useRouter();
   // near wallet check
-  const { signedAccountId, wallet } = useContext(NearContext) as {
-    signedAccountId: string | null;
+  const { wallet } = useContext(NearContext) as {
     wallet: {
-      signIn: () => void;
-      signOut: () => void;
+      signIn: () => Promise<void>;
+      signOut: () => Promise<void>;
     } | null;
   };
-
-  const [action, setAction] = useState<
-    MouseEventHandler<HTMLButtonElement> | undefined
-  >();
-  const [label, setLabel] = useState("Loading...");
-
-  useEffect(() => {
-    if (!wallet) return;
-
-    if (signedAccountId) {
-      setAction(() => wallet.signOut);
-      setLabel(`Logout ${signedAccountId}`);
-    } else {
-      setAction(() => wallet.signIn);
-      setLabel("Login in Near Wallet");
-    }
-  }, [signedAccountId, wallet]);
 
   // Near wallet end
 
@@ -60,6 +42,7 @@ export default function Header({ children, className }: HeaderProps) {
   const handleLogout = async () => {
     const { error } = await supabaseClient.auth.signOut();
     player.reset();
+    wallet?.signOut;
     router.refresh();
 
     if (error) {
@@ -161,40 +144,40 @@ export default function Header({ children, className }: HeaderProps) {
           items-center
           gap-x-4"
         >
-          {" "}
-          <Button className="btn btn-secondary" onClick={action}>
-            {label}
-          </Button>
-          {user ? (
-            <div className="flex gap-4 items-center">
-              <Button onClick={handleLogout} className="bg-white px-6 py-2">
-                LogOut
-              </Button>
-              <Button
-                onClick={() => router.push("/account")}
-                className="bg-white"
-              >
-                <FaUser />
-              </Button>
-            </div>
+          {wallet ? (
+            <Button
+              className="bg-white px-6 py-2"
+              onClick={() => wallet.signIn()}
+            >
+              Connect Near Wallet
+            </Button>
           ) : (
             <>
-              <div>
-                <Button
-                  onClick={authModal.onOpen}
-                  className="bg-transparent text-neutral-300 font-medium"
-                >
-                  Sign up
-                </Button>
-              </div>
-              <div>
-                <Button
-                  onClick={authModal.onOpen}
-                  className="bg-white px-5 py-2"
-                >
-                  Log in
-                </Button>
-              </div>
+              {user ? (
+                <div className="flex gap-4 items-center">
+                  <Button onClick={handleLogout} className="bg-white px-6 py-2">
+                    LogOut
+                  </Button>
+                  <Button
+                    onClick={() => router.push("/account")}
+                    className="bg-white"
+                  >
+                    <FaUser />
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex w-full flex-col md:flex-row gap-4 items-center">
+                  {/* <Button
+                    onClick={authModal.onOpen}
+                    className="bg-transparent text-neutral-300 font-medium"
+                  >
+                    Create profile
+                  </Button> */}
+                  <Button onClick={authModal.onOpen} className="bg-white ">
+                    Log into music Profile
+                  </Button>
+                </div>
+              )}
             </>
           )}
         </div>

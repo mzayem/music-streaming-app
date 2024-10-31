@@ -35,7 +35,7 @@ export default function AuthModal() {
   return (
     <Modal
       title="welcome back"
-      description="Login to your account"
+      description="Set up profile for uploads"
       isOpen={isOpen}
       onChange={onChange}
     >

@@ -9,6 +9,8 @@ import { TbPlaylist } from "react-icons/tb";
 import MediaItem from "./mediaItem";
 import useOnPlay from "@/hooks/useOnPlay";
 import useSubscribeModal from "@/hooks/useSubscribeModal";
+import { useContext } from "react";
+import { NearContext } from "@/wallet/near";
 
 interface LibraryProps {
   songs: Song[];
@@ -21,7 +23,19 @@ export default function Library({ songs }: LibraryProps) {
   const { user, subscription } = useUser();
   const onPlay = useOnPlay(songs);
 
+  const { signedAccountId, wallet } = useContext(NearContext) as {
+    signedAccountId: string | null;
+    wallet: {
+      signIn: () => Promise<void>;
+      signOut: () => Promise<void>;
+    } | null;
+  };
+
   const onClick = () => {
+    if (!signedAccountId) {
+      return wallet?.signIn();
+    }
+
     if (!user) {
       return authModal.onOpen();
     }
@@ -29,6 +43,7 @@ export default function Library({ songs }: LibraryProps) {
     if (!subscription) {
       return subscribeModal.onOpen();
     }
+
     return uploadModal.onOpen();
   };
 
