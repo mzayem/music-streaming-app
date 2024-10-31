@@ -26,6 +26,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <title>Beat Stream</title>
+      </head>
       <body className={font.className}>
         <WalletProvider wallet={wallet}>
           <ToasterProvider />
