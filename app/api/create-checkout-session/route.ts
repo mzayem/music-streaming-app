@@ -34,9 +34,9 @@ export async function POST (
                 trial_from_plan: true,
                 metadata,
             },
-            // success_url: `${getURL()}/account`,
-            // cancel_url: `${getURL()}`
-            sucess_url: 'https://beat-stream-nu.vercel.app/account',
+            // success_url: 'http://localhost:3000/account',
+            // cancel_url: 'http://localhost:3000',
+            success_url: 'https://beat-stream-nu.vercel.app/account',
             cancel_url: 'https://beat-stream-nu.vercel.app'
         }as any);
         return NextResponse.json({sessionId: session.id});
